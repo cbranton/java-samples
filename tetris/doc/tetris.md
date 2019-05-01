@@ -8,6 +8,7 @@ Bug Fixes
 2. Get Tetris to run
 Minor Enhancements
 1. Change the piece colors as displayed below. Cyan, blue, orange, yellow, green, pink, red.
-Picture
+
+![Tetris shapes](./img/shapes.png "Tetris Shapes")\
 2. Add the ability to rotate the piece counterclockwise when pressing the “UP” arrow key 
 on the keyboard (Note: Pieces will not maintain their normal shape until later).
