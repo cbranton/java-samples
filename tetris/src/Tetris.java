@@ -8,7 +8,13 @@ import java.util.Collections;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class TetrisBroken extends JPanel {
+/**
+ *  https://gist.github.com/DataWraith/5236083
+ *  https://rosettacode.org/wiki/Tetris/Java
+ * https://stackoverflow.com/questions/16823620/tetris-ai-issues-understanding-breadth-first-search
+ */
+
+public class Tetris extends JPanel {
     private static final long serialVersionUID = -8715353373678321308L;
 
     private final Point[][][] Tetraminos = {
@@ -47,11 +53,11 @@ public class TetrisBroken extends JPanel {
                     { new Point(1, 0), new Point(0, 1), new Point(1, 1), new Point(0, 2) },
                     { new Point(0, 0), new Point(1, 0), new Point(1, 1), new Point(2, 1) },
                     { new Point(0, 0), new Point(0, 0), new Point(0, 0), new Point(0, 0) } } };
-    private final Color[] tetraminoColors = { Color.darkGray, Color.darkGray, Color.darkGray, Color.darkGray, Color.darkGray, Color.darkGray, Color.darkGray };
+    private final Color[] tetraminoColors = { Color.red, Color.green, Color.yellow, Color.blue, Color.cyan, Color.magenta, Color.orange };
     private Point pieceOrigin;
     private int currentPiece;
     private int rotation;
-    private ArrayList<Integer> nextPieces = new ArrayList<Integer>;
+    private ArrayList<Integer> nextPieces = new ArrayList<Integer>();
     private long score;
     private Color[][] well;
     private boolean testing = true;
@@ -69,7 +75,7 @@ public class TetrisBroken extends JPanel {
             }
         }
         newPiece();
-        breakTetris();
+       // breakTetris();
     }
 
     // Put a new, random piece into the dropping position
@@ -77,7 +83,7 @@ public class TetrisBroken extends JPanel {
         pieceOrigin = new Point(5, 2);
         rotation = 0;
         if (nextPieces.isEmpty()) {
-            Collections.addAll(nextPieces, 0, 1, 2, 3, 4, 5, 6)
+            Collections.addAll(nextPieces, 0, 1, 2, 3, 4, 5, 6);
             if (testing){
                 Collections.shuffle(nextPieces);
             }
@@ -101,7 +107,7 @@ public class TetrisBroken extends JPanel {
     public void rotate(int i) {
         int newRotation = (rotation + i) % 4;
         if (newRotation < 0) {
-            newRotation == 3;
+            newRotation = 3;
         }
         if (!collidesAt(pieceOrigin.x, pieceOrigin.y, newRotation)) {
             rotation = newRotation;
@@ -125,18 +131,19 @@ public class TetrisBroken extends JPanel {
             fixToWell();
         }
         repaint();
-        
+    }
     
 
     // Make the dropping piece part of the well, so it is available for
     // collision detection.
-    public void fixToWell( {
+    public void fixToWell() {
         for (Point p : Tetraminos[currentPiece][rotation]) {
             well[pieceOrigin.x + p.x][pieceOrigin.y + p.y] = tetraminoColors[currentPiece];
         }
         clearRows();
         newPiece();
     }
+
 
     public void deleteRow(int row) {
         for (int j = row - 1; j > 0; j--) {
@@ -145,6 +152,7 @@ public class TetrisBroken extends JPanel {
             }
         }
     }
+
 
     // Clear completed rows from the field and award score according to
     // the number of simultaneously cleared rows.
@@ -216,7 +224,7 @@ public class TetrisBroken extends JPanel {
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         f.setSize(12 * 26 + 10, 26 * 23 + 25);
         f.setVisible(true);
-        final TetrisBroken game = new TetrisBroken();
+        final Tetris game = new Tetris();
         game.init();
         f.add(game);
         // Keyboard controls
@@ -224,10 +232,12 @@ public class TetrisBroken extends JPanel {
             public void keyTyped(KeyEvent e) {}
 
             public void keyPressed(KeyEvent e) {
-                switch (e.getKeyCode() {
+                switch (e.getKeyCode()) {
 
                 //Add UP arrow functionality here
-
+                    case KeyEvent.VK_UP:
+                        game.rotate(-1);
+                        break;
                     case KeyEvent.VK_DOWN:
                         game.rotate(+1);
                         break;
